@@ -10,16 +10,16 @@ import java.security.NoSuchAlgorithmException;
 public class MD5_2 {
     
     public static int keylength = 20;
-    public static int[] getMD5(int[] input , int index) {
+    public static int[] getMD5(int[] input) {
         try {
             int[] ret = new int[20];
             int length = keylength;
             if (input.length < keylength){
                 length = input.length;
             }
-            int xorInput = binaryToInt(input) ^ index;
+            int asInt = binaryToInt(input);
             //adding the input value to a string.
-            String bitString = ""+ xorInput;
+            String bitString = ""+ asInt;
 
             //this is the MD5 hashing on the string
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -104,6 +104,12 @@ public class MD5_2 {
         }
         return ret;
     }
+    
+    public static int fi(int[] input1, int input2){
+        int ret;
+        ret = binaryToInt(input1) ^ input2; 
+        return ret;
+    }
  
     public static void main(String[] args) throws NoSuchAlgorithmException {
         boolean[] covered = new boolean[(int) Math.pow (2.00,(double)keylength)]; //used to keep track true in the array = covered point
@@ -123,8 +129,8 @@ public class MD5_2 {
             //For-loop representing the chain
             //In each iteration it is MD5'ed and then setting it to covered.
             for(int j = 0; j < 256; j++){
-                currentPoint = getMD5(currentPoint, j);
-                index = binaryToInt(currentPoint);
+                currentPoint = getMD5(currentPoint);
+                index = fi(currentPoint, index);
                 if(!covered[index]){
                     coveredNumbers++;
                 }
