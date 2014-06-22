@@ -73,6 +73,7 @@ public class MD5 {
         }
         return ret;
     }
+
  
     public static void main(String[] args) throws NoSuchAlgorithmException {
         boolean[] covered = new boolean[(int) Math.pow (2.00,(double)keylength)]; //used to keep track true in the array = covered point
