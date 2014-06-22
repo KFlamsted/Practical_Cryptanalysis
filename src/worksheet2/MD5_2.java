@@ -10,6 +10,11 @@ import java.security.NoSuchAlgorithmException;
 public class MD5_2 {
     
     public static int keylength = 20;
+     /**
+     * The md5_redux method.
+     * @param input - 20bit bitstring in an int array
+     * @return int[] bit array representing the new 20bit bitstring
+     */
     public static int[] getMD5(int[] input) {
         try {
             int[] ret = new int[20];
@@ -71,40 +76,6 @@ public class MD5_2 {
         return ret;
     }
     
-    //returning the number of trues in a boolean array
-    public static int numberOfTrues(boolean[] input) {
-        int ret = 0;
-        for(int i = 0; i < input.length; i++){
-            if(input[i]) ret++;
-        }
-        return ret;
-    }
-    
-    public static int[] intToBinary(int input){
-        int[] ret = new int[20];
-        char[] bitStringChar;
-        String bitString = Integer.toString(input, 2);
-        String cutOff;//converting to binary string
-        if(bitString.length() > 20){
-            cutOff = bitString.substring(bitString.length() - 20);
-            bitStringChar = cutOff.toCharArray();
-        } else {
-            bitStringChar = bitString.toCharArray();
-        }
-        //adding it into the int array.
-        int index = ret.length;
-        for (int i = bitStringChar.length; i >= 0 ; i--){
-            if(bitStringChar[i] == '1'){
-                ret[index] = 1;
-                index--;
-            }else{
-                ret[index] = 0;
-                index--;
-            }
-        }
-        return ret;
-    }
-    
     public static int fi(int[] input1, int input2){
         int ret;
         ret = binaryToInt(input1) ^ input2; 
@@ -113,19 +84,14 @@ public class MD5_2 {
  
     public static void main(String[] args) throws NoSuchAlgorithmException {
         boolean[] covered = new boolean[(int) Math.pow (2.00,(double)keylength)]; //used to keep track true in the array = covered point
-        int[] currentPoint = new int[20];
-        int[] tempPoint = new int[20];
+        int[] currentPoint;
         int coveredNumbers = 0;
-        int coveredNumbers2 = 0;
          //2^16 = 65536 on iteration in the for-loop for each 2^16 chains.
         for(int i = 0; i < 65536; i++){
         currentPoint = randomStartPoint();
         int index = binaryToInt(currentPoint);
         if(!covered[index]) coveredNumbers++;
         covered[index] = true;
-        if(i % 100 == 0){
-        System.out.println("Chain nr: " + i + " Covered: "+ coveredNumbers);
-        }
             //For-loop representing the chain
             //In each iteration it is MD5'ed and then setting it to covered.
             for(int j = 0; j < 256; j++){
@@ -137,15 +103,9 @@ public class MD5_2 {
                 covered[index] = true;
             }
         }
-        int trues = 0;
         int all = (int) Math.pow (2.00,(double)keylength); //Number of possible keys, calculated using the keylength.
-        for(int i = 0; i < covered.length; i++){
-            if(covered[i]){
-                trues++;
-            }
-        }
     
-        System.out.println("Numbers covered: " + trues);
+        System.out.println("Numbers covered: " + coveredNumbers);
         System.out.println("Number of possibilites: " + all);
     }
 }
